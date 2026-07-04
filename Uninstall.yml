@@ -1,0 +1,19 @@
+---
+- name: Uninstall Acronis agent
+  hosts: testing
+  become: true
+
+  tasks:
+        # --- Шаг 2: Останавливаем сервис перед удалением ---
+    - name: Stop Acronis service
+      ansible.builtin.systemd:
+        name: acronis_mms.service
+        state: stopped
+        enabled: false
+      ignore_errors: true
+
+    # --- Шаг 3: Удаляем агент ---
+    - name: Uninstall Acronis agent
+      acronis_agent:
+        installer: /tmp/<<Cyber File>>
+        state: absent
