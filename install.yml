@@ -1,0 +1,33 @@
+---
+- name: Deploy Acronis agent
+  hosts: testing
+  become: true
+
+  tasks:
+    # --- Шаг 1: Копируем инсталлер с контрольной машины на все хосты ---
+    - name: Copy Acronis installer to target hosts
+      ansible.builtin.copy:
+        src: <<Install File>>
+        dest: /tmp/<<Install File>>
+        mode: '0755'
+
+    # --- Шаг 2: Устанавливаем агент ---
+    - name: Install Acronis agent
+      acronis_agent:
+        installer: /tmp/<<Install File>>
+        state: present
+        components:
+          - BackupAndRecoveryAgent
+          - StorageServer
+        server: <<Management server ip>>
+        registration_method: token
+        token: "<<TOKEN>>"
+        language: ru
+        skip_registration: false
+
+    # --- Шаг 3: Запускаем сервис ---
+    - name: Ensure Acronis service is running
+      ansible.builtin.systemd:
+        name: acronis_mms.service
+        state: started
+        enabled: true
