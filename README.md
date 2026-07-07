@@ -3,11 +3,11 @@
 [![Ansible](https://img.shields.io/badge/Ansible-2.9+-blue.svg)](https://www.ansible.com/)
 [![Python](https://img.shields.io/badge/Python-3.6+-green.svg)](https://www.python.org/)
 
-Кастомный Ansible-модуль для автоматизации установки и удаления **Acronis Cyber Protect** (ранее Acronis Backup) агентов на Linux-хостах.
+Кастомный Ansible-модуль для автоматизации установки и удаления *Cyber Backup** агентов на Linux-хостах.
 
 ## 📖 Описание
 
-Модуль `acronis_agent` позволяет полностью автоматизировать развертывание агентов Acronis Cyber Protect в инфраструктуре любой масштаба. Он использует официальный CLI-инсталлятор Acronis и поддерживает все основные сценарии регистрации агента на сервере управления.
+Модуль `CyberBackup_agent` позволяет полностью автоматизировать развертывание агентов CyberBackup в инфраструктуре любой масштаба. Он использует официальный CLI-инсталлятор CyberBackup и поддерживает все основные сценарии регистрации агента на сервере управления.
 
 ### Что умеет модуль
 
@@ -26,7 +26,7 @@
 ```
 acronis/
 ├── library/
-│   └── acronis_agent.py              # Сам модуль
+│   └── CyberBackup.py              # Сам модуль
 ├── CyberBackup_18_64-bit.x86_64      # Инсталлятор Acronis
 ├── inventory                         # Список хостов
 ├── install.yml                       # Плейбук установки
@@ -65,7 +65,7 @@ ansible_user=root
         mode: '0755'
 
     - name: Install Acronis agent
-      acronis_agent:
+      CyberBackup:
         installer: /tmp/CyberBackup_18_64-bit.x86_64
         state: present
         components:
@@ -114,7 +114,7 @@ ansible-playbook -i inventory install.yml
       ignore_errors: true
 
     - name: Uninstall Acronis agent
-      acronis_agent:
+      CyberBackup:
         installer: /tmp/CyberBackup_18_64-bit.x86_64
         state: absent
 
@@ -134,7 +134,7 @@ ansible-playbook -i inventory uninstall.yml
 
 | Параметр | Тип | Обязательный | По умолчанию | Описание |
 |----------|-----|:------------:|:------------:|----------|
-| `installer` | path | ✅ | — | Путь к инсталлятору Acronis на целевом хосте |
+| `installer` | path | ✅ | — | Путь к инсталлятору CyberBackup на целевом хосте |
 | `state` | str | ❌ | `present` | Состояние агента: `present` (установить) или `absent` (удалить) |
 | `components` | list | ❌ | `[]` | Список компонентов для установки |
 | `server` | str | ⚠️ | — | Адрес сервера управления Acronis (обязателен при регистрации) |
@@ -178,7 +178,7 @@ ansible-playbook -i inventory uninstall.yml
 
 ```yaml
 - name: Install with credentials
-  acronis_agent:
+  CyberBackup:
     installer: /tmp/CyberBackup_18_64-bit.x86_64
     state: present
     components:
@@ -195,7 +195,7 @@ ansible-playbook -i inventory uninstall.yml
 
 ```yaml
 - name: Install without registration
-  acronis_agent:
+  CyberBackup:
     installer: /tmp/CyberBackup_18_64-bit.x86_64
     state: present
     components:
@@ -261,4 +261,4 @@ ansible-playbook -i inventory install.yml -vvv
 ```
 
 
-Создано для автоматизации развертывания Acronis Cyber Protect в корпоративной инфраструктуре.
+Создано для автоматизации развертывания CyberBackup в корпоративной инфраструктуре.
